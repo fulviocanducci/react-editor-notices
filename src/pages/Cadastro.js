@@ -17,7 +17,7 @@ function Cadastro() {
   const onSubmit = (data) => {
     notices
       .add(data)
-      .then((response) => {})
+      .then()
       .catch((error) => console.log(error))
       .then(() => {
         history.push("/lista");
@@ -30,6 +30,7 @@ function Cadastro() {
         <div className="form-group">
           <label htmlFor="inputEmail">Titulo da noticia:</label>
           <input
+            autoFocus={true}
             name="title"
             type="text"
             className={"form-control" + cssValidOrInvalid(errors, "title")}
@@ -67,14 +68,28 @@ function Cadastro() {
             name="text"
             id="inputTexto"
             ref={register({ required: true })}
+            tabIndex={2}
           />
           <small id="chamadoHelp" className="form-text text-danger">
             {errors.text?.type === "required" && "Digite o texto ..."}
           </small>
         </div>
-        <button type="submit" className="btn btn-primary btn-block">
-          Adicionar
-        </button>
+        <div className="row mb-5">
+          <div className="col-md-6">
+            <button type="submit" className="btn btn-primary btn-block">
+              Adicionar
+            </button>
+          </div>
+          <div className="col-md-6">
+            <button
+              type="button"
+              onClick={() => history.push("/lista")}
+              className="btn btn-danger btn-block"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   );

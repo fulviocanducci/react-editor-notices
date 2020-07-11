@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import notices from "../services/notices";
 import { useHistory } from "react-router-dom";
 import { friendlyUrl } from "../utils";
+import Loading from "../components/Loading";
 
 function Lista() {
   const [list, setList] = useState([]);
@@ -17,7 +18,9 @@ function Lista() {
     notices
       .list()
       .then((response) => {
-        setList(response.data);
+        setTimeout(() => {
+          setList(response.data);
+        }, 500);
       })
       .catch((error) => console.log(error))
       .then(() => {});
@@ -25,6 +28,10 @@ function Lista() {
   useEffect(() => {
     loadList();
   }, []);
+
+  if (list.length === 0) {
+    return <Loading />;
+  }
   return (
     <div>
       <table className="table">

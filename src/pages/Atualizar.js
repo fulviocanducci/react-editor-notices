@@ -8,9 +8,10 @@ import { useHistory, useParams } from "react-router-dom";
 import { cssValidOrInvalid } from "../utils";
 
 import notices from "../services/notices";
+import Loading from "../components/Loading";
 
 function Atualizar() {
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState(null);
   const history = useHistory();
   const { id } = useParams();
 
@@ -31,19 +32,24 @@ function Atualizar() {
     notices
       .get(id)
       .then((response) => {
-        setValues(response.data);
-        console.log(response.data);
+        setTimeout(() => {
+          setValues(response.data);
+        }, 500);
       })
       .catch((error) => console.log(error))
       .then(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  if (values === null) {
+    return <Loading />;
+  }
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group">
           <label htmlFor="inputEmail">Titulo da noticia:</label>
           <input
+            autoFocus={true}
             defaultValue={(values && values.title) || ""}
             name="title"
             type="text"
@@ -83,15 +89,29 @@ function Atualizar() {
             value={(values && values.text) || ""}
             name="text"
             id="inputTexto"
+            tabIndex={1}
             ref={register({ required: true })}
           />
           <small id="chamadoHelp" className="form-text text-danger">
             {errors.text?.type === "required" && "Digite o texto ..."}
           </small>
         </div>
-        <button type="submit" className="btn btn-primary btn-block">
-          Atualizar
-        </button>
+        <div className="row mb-5">
+          <div className="col-md-6">
+            <button type="submit" className="btn btn-primary btn-block">
+              Atualizar
+            </button>
+          </div>
+          <div className="col-md-6">
+            <button
+              type="button"
+              onClick={() => history.push("/lista")}
+              className="btn btn-danger btn-block"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   );

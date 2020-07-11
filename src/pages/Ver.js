@@ -12,20 +12,19 @@ function Ver() {
   const [notice, setNotice] = useState(null);
   const history = useHistory();
   let { id } = useParams();
-  function loadNotice() {
-    notices
-      .get(id)
-      .then((response) =>
-        setTimeout(() => {
-          setNotice(response.data);
-        }, 1000)
-      )
-      .catch((errors) => console.log(errors))
-      .then(() => {});
-  }
-
   useEffect(() => {
-    loadNotice();
+    (function loadNotice() {
+      notices
+        .get(id)
+        .then((response) =>
+          setTimeout(() => {
+            setNotice(response.data);
+          }, 1000)
+        )
+        .catch((errors) => console.log(errors))
+        .then(() => {});
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   if (notice === null) {
     return <Loading />;
